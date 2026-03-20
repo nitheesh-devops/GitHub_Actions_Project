@@ -25,15 +25,13 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
+
   sonarqube:
     runs-on: self-hosted
     needs: compile
     steps:
-
       - name: SonarQube Analysis
-        run:  mvn sonar:sonar 
-         
-         
+        run: mvn sonar:sonar
 
 
   security-check:
@@ -66,7 +64,6 @@ jobs:
     runs-on: self-hosted
     needs: docker-build
     steps:
-
       - name: Configure kubeconfig
         run: |
           aws eks update-kubeconfig \
