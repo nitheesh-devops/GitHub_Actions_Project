@@ -37,13 +37,12 @@ jobs:
   security-check:
     runs-on: self-hosted
     needs: sonarqube
-    steps:
-      - name: Install Trivy
-        run: |
-          wget https://github.com/aquasecurity/trivy/releases/download/v0.67.2/trivy_0.67.2_Linux-64bit.deb
-          sudo dpkg -i trivy_0.67.2_Linux-64bit.deb
-
-      - name: Trivy FS Scan
+   steps:
+    - name: Install Trivy
+      run: |
+       wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.deb
+       sudo dpkg -i trivy_Linux-64bit.deb
+       - name: Trivy FS Scan
         run: trivy fs --format table -o fs-report.json .
 
 
