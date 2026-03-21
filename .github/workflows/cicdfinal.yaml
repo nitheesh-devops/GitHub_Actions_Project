@@ -17,7 +17,7 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      - name: install maven
+      - name: Install Maven
         run: |
           sudo apt update
           sudo apt install maven -y
@@ -25,31 +25,36 @@ jobs:
       - name: Build with Maven
         run: mvn clean package
 
-
   sonarqube:
     runs-on: self-hosted
     needs: compile
     steps:
+      - uses: actions/checkout@v4
+
       - name: SonarQube Analysis
         run: mvn sonar:sonar
-
 
   security-check:
     runs-on: self-hosted
     needs: sonarqube
-   steps:
-    - name: Install Trivy
-      run: |
-       wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.deb
-       sudo dpkg -i trivy_Linux-64bit.deb
-       - name: Trivy FS Scan
-        run: trivy fs --format table -o fs-report.json .
+    steps:
+      - uses: actions/checkout@v4
 
+      - name: Install Trivy
+        run: |
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.deb
+          sudo dpkg -i trivy_Linux-64bit.deb || sudo apt-get install -f -y
+
+      - name: Trivy FS Scan
+        run: |
+          trivy fs --format table -o fs-report.json .
 
   docker-build:
     runs-on: self-hosted
     needs: security-check
     steps:
+      - uses: actions/checkout@v4
+
       - name: Build Docker Image
         run: |
           docker build -t ${{ secrets.Docker_Repository }}:${{ github.sha }} .
@@ -57,5 +62,3 @@ jobs:
       - name: Push images to Docker Hub
         run: |
           docker push ${{ secrets.Docker_Repository }}:${{ github.sha }}
-
-
