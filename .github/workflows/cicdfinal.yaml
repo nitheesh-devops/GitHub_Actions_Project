@@ -29,7 +29,7 @@ jobs:
     runs-on: self-hosted
     needs: compile
     steps:
-      - uses: actions/checkout@v4
+
 
       - name: SonarQube Analysis
         run: mvn sonar:sonar
@@ -38,7 +38,7 @@ jobs:
     runs-on: self-hosted
     needs: sonarqube
     steps:
-      - uses: actions/checkout@v4
+      
 
       - name: Install Trivy
         run: |
