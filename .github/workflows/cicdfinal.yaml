@@ -23,7 +23,7 @@ jobs:
           sudo apt install maven -y
 
       - name: Build with Maven
-        run: mvn  package
+        run: mvn clean package
 
   sonarqube:
     runs-on: self-hosted
@@ -64,7 +64,6 @@ jobs:
     needs: security-check
     steps:
     
-
       - name: Build Docker Image
         run: |
           docker build -t ${{ secrets.Docker_Repository }}:${{ github.sha }} .
