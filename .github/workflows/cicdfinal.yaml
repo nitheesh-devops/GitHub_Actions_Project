@@ -42,8 +42,9 @@ jobs:
 
       - name: Install Trivy
         run: |
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.deb
-          sudo dpkg -i trivy_Linux-64bit.deb || sudo apt-get install -f -y
+             wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.69.3_Linux-64bit.tar.gz
+             tar -xvf trivy_0.69.3_Linux-64bit.tar.gz
+              sudo mv trivy /usr/local/bin/
 
       - name: Trivy FS Scan
         run: |
