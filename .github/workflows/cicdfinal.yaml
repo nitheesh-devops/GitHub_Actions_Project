@@ -42,9 +42,11 @@ jobs:
 
       - name: Install Trivy
         run: |
-             wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.69.3_Linux-64bit.tar.gz
-             tar -xvf trivy_0.69.3_Linux-64bit.tar.gz
-              sudo mv trivy /usr/local/bin/
+           sudo apt-get install wget gnupg
+           wget -qO - https://aquasecurity.github.io/trivy-repo/deb/public.key | gpg --dearmor | sudo tee /usr/share/keyrings/trivy.gpg > /dev/null
+           echo "deb [signed-by=/usr/share/keyrings/trivy.gpg] https://aquasecurity.github.io/trivy-repo/deb generic main" | sudo tee -a /etc/apt/sources.list.d/trivy.list
+            sudo apt-get update
+           sudo apt-get install trivy
 
       - name: Trivy FS Scan
         run: |
